@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}
+  My Routes
+{% endblock title %}
+{% block content %}
+  <div class="container mx-auto px-4">
+    <!-- Routes Section -->
+    <h2 class="text-2xl font-semibold mb-4">Your Routes</h2>
+    <!-- Carousel for Routes -->
+    <div class="relative">
+      <div class="carousel-container flex space-x-4 overflow-x-auto py-4">
+        {% for route in routes %}
+          <div class="carousel-item flex-none w-48 text-center">
+            <a href="{% url 'gallery:view_route' route.id %}"
+               class="flex bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow h-60 flex-col justify-between items-center">
+              <div class="w-full h-32 bg-cover bg-center rounded-t-lg"
+                   style="background-image: url('{{ route.background.image.url }}')"></div>
+              <div class="flex-1 flex items-center justify-center w-full">
+                <span class="text-lg font-medium break-words text-center">{{ route.name }}</span>
+              </div>
+            </a>
+          </div>
+        {% empty %}
+          <p class="text-center">No routes available.</p>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Create New Route Section -->
+    <h3 class="text-xl font-medium mt-8 mb-4">Create New Route</h3>
+    <div class="relative">
+      <div class="carousel-container flex space-x-4 overflow-x-auto py-4">
+        {% for bg in backgrounds %}
+          <div class="carousel-item flex-none w-48 text-center">
+            <form method="post"
+                  class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow flex flex-col items-center justify-between h-60">
+              {% csrf_token %}
+              <input type="hidden" name="background_id" value="{{ bg.id }}">
+              <div class="w-full h-32 bg-cover bg-center rounded-t-lg"
+                   style="background-image: url('{{ bg.image.url }}')"></div>
+              <div class="flex-1 flex items-center justify-center w-full">
+                <span class="text-lg font-medium break-words text-center">{{ bg.name|truncatechars:25 }}</span>
+              </div>
+              <button type="submit"
+                      class="bg-green-500 text-white py-1 px-3 rounded-md hover:bg-green-600 transition-all text-sm">
+                Create Route
+              </button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}
